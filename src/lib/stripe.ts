@@ -1,13 +1,12 @@
 import Stripe from "stripe";
+import { env } from "@/env";
 
 // Lazy singleton — only created when first accessed at runtime (not build time)
 let _stripe: Stripe | null = null;
 
 export function getStripe(): Stripe {
   if (!_stripe) {
-    const key = process.env.STRIPE_SECRET_KEY;
-    if (!key) throw new Error("STRIPE_SECRET_KEY is not set");
-    _stripe = new Stripe(key, {
+    _stripe = new Stripe(env.STRIPE_SECRET_KEY, {
       apiVersion: "2026-01-28.clover",
       typescript: true,
     });
@@ -31,7 +30,7 @@ export const PLANS = {
     name: "Pro",
     description: "For power users",
     price: 8,
-    priceId: process.env.STRIPE_PRO_PRICE_ID ?? null,
+    priceId: env.STRIPE_PRO_PRICE_ID,
     features: [
       "Unlimited projects",
       "All features",
