@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CreateProjectButton } from "@/components/create-project-button";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -28,7 +28,7 @@ export default async function DashboardPage() {
         <p className="mt-2 text-sm text-gray-600">
           Get started by creating your first project.
         </p>
-        <Button className="mt-6">Create Project</Button>
+        <CreateProjectButton className="mt-6" />
       </div>
     </div>
   );
