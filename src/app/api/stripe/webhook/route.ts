@@ -3,13 +3,14 @@ import { headers } from "next/headers";
 import { getStripe } from "@/lib/stripe";
 import { createServerClient } from "@supabase/ssr";
 import Stripe from "stripe";
+import { env } from "@/env";
 
 export async function POST(request: Request) {
   const body = await request.text();
   const headersList = await headers();
   const signature = headersList.get("stripe-signature");
 
-  if (!signature || !process.env.STRIPE_WEBHOOK_SECRET) {
+  if (!signature || !env.STRIPE_WEBHOOK_SECRET) {
     return NextResponse.json({ error: "Missing signature" }, { status: 400 });
   }
 
@@ -19,7 +20,7 @@ export async function POST(request: Request) {
     event = getStripe().webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET
+      env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
     console.error("Webhook signature verification failed:", err);
@@ -28,8 +29,8 @@ export async function POST(request: Request) {
 
   // Use service role for admin operations
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    env.NEXT_PUBLIC_SUPABASE_URL,
+    env.SUPABASE_SERVICE_ROLE_KEY,
     { cookies: { getAll: () => [], setAll: () => {} } }
   );
 
