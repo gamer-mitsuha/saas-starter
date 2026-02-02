@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DeleteAccountButton } from "@/components/delete-account-button";
+import { ProfileForm } from "./profile-form";
 
 export default async function SettingsPage() {
   const supabase = await createClient();
@@ -20,6 +21,8 @@ export default async function SettingsPage() {
     ? profile.plan.charAt(0).toUpperCase() + profile.plan.slice(1)
     : "Free";
 
+  const fullName = profile?.full_name ?? user.user_metadata?.full_name ?? "";
+
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
@@ -28,22 +31,7 @@ export default async function SettingsPage() {
       {/* Profile Section */}
       <div className="mt-8 rounded-xl border bg-white p-6 shadow-sm">
         <h2 className="text-lg font-semibold text-gray-900">Profile</h2>
-        <div className="mt-4 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <p className="mt-1 text-sm text-gray-900">{user.email}</p>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Name
-            </label>
-            <p className="mt-1 text-sm text-gray-900">
-              {user.user_metadata?.full_name ?? "Not set"}
-            </p>
-          </div>
-        </div>
+        <ProfileForm initialFullName={fullName} email={user.email || ""} />
       </div>
 
       {/* Subscription Section */}
