@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { DeleteAccountButton } from "@/components/delete-account-button";
 
 export default async function SettingsPage() {
   const supabase = await createClient();
@@ -62,9 +63,9 @@ export default async function SettingsPage() {
         <p className="mt-2 text-sm text-gray-600">
           Once you delete your account, there is no going back.
         </p>
-        <button className="mt-4 rounded-lg border border-red-300 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50">
-          Delete Account
-        </button>
+        <div className="mt-4">
+          <DeleteAccountButton />
+        </div>
       </div>
     </div>
   );
