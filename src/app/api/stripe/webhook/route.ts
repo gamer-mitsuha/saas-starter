@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   const headersList = await headers();
   const signature = headersList.get("stripe-signature");
 
-  if (!signature || !env.STRIPE_WEBHOOK_SECRET) {
+  if (!signature) {
     return NextResponse.json({ error: "Missing signature" }, { status: 400 });
   }
 
