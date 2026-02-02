@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DeleteAccountButton } from "@/components/delete-account-button";
+import { ManageSubscriptionButton } from "@/components/manage-subscription-button";
 
 export default async function SettingsPage() {
   const supabase = await createClient();
@@ -68,11 +69,7 @@ export default async function SettingsPage() {
               </a>
             )}
             {profile?.plan === "pro" && (
-               <button
-               className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-             >
-               Manage Subscription
-             </button>
+               <ManageSubscriptionButton />
             )}
           </div>
         </div>
