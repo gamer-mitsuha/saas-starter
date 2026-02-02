@@ -9,6 +9,16 @@ export default async function SettingsPage() {
 
   if (!user) redirect("/login");
 
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .single();
+
+  const planLabel = profile?.plan
+    ? profile.plan.charAt(0).toUpperCase() + profile.plan.slice(1)
+    : "Free";
+
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
@@ -41,17 +51,28 @@ export default async function SettingsPage() {
         <div className="mt-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium text-gray-900">Free Plan</p>
+              <p className="font-medium text-gray-900">{planLabel} Plan</p>
               <p className="text-sm text-gray-600">
-                Basic features included.
+                {profile?.plan === "pro"
+                  ? "You have access to all features."
+                  : "Basic features included."}
               </p>
             </div>
-            <a
-              href="/pricing"
-              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-            >
-              Upgrade to Pro
-            </a>
+            {profile?.plan !== "pro" && (
+              <a
+                href="/pricing"
+                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              >
+                Upgrade to Pro
+              </a>
+            )}
+            {profile?.plan === "pro" && (
+               <button
+               className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+             >
+               Manage Subscription
+             </button>
+            )}
           </div>
         </div>
       </div>

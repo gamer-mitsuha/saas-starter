@@ -8,6 +8,16 @@ export default async function DashboardPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", user?.id)
+    .single();
+
+  const planLabel = profile?.plan
+    ? profile.plan.charAt(0).toUpperCase() + profile.plan.slice(1)
+    : "Free";
+
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
@@ -17,9 +27,10 @@ export default async function DashboardPage() {
 
       {/* Stats Grid */}
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* TODO: Connect to real projects count when table exists */}
         <StatCard title="Projects" value="0" description="Active projects" />
         <StatCard title="Usage" value="0%" description="Of your plan limit" />
-        <StatCard title="Plan" value="Free" description="Upgrade anytime" />
+        <StatCard title="Plan" value={planLabel} description="Upgrade anytime" />
       </div>
 
       {/* Empty State */}
