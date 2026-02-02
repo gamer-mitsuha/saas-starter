@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DeleteAccountButton } from "@/components/delete-account-button";
 import { ManageSubscriptionButton } from "@/components/manage-subscription-button";
+import { ProfileNameForm } from "./profile-name-form";
 
 export default async function SettingsPage() {
   const supabase = await createClient();
@@ -36,14 +37,7 @@ export default async function SettingsPage() {
             </label>
             <p className="mt-1 text-sm text-gray-900">{user.email}</p>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Name
-            </label>
-            <p className="mt-1 text-sm text-gray-900">
-              {user.user_metadata?.full_name ?? "Not set"}
-            </p>
-          </div>
+          <ProfileNameForm initialName={profile?.full_name ?? user.user_metadata?.full_name ?? ""} />
         </div>
       </div>
 
